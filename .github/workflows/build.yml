@@ -23,10 +23,10 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-          cache-dependency-path: tmp-test/package-lock.json
+          cache-dependency-path: package-lock.json
 
       - name: Install dependencies
-        run: cd tmp-test && npm install
+        run: npm install
 
       - name: Test
         uses: mattallty/jest-github-action@v1
@@ -34,21 +34,21 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           test-command: "npm run coverage-jenkins"
-          working-directory: ./tmp-test
+          working-directory: ./
 
       - name: Save Code Linting Report JSON
-        run: cd tmp-test && npm run lint:json
+        run: npm run lint:json
         continue-on-error: true
 
       - name: Annotate Code Linting Results
         uses: ataylorme/eslint-annotate-action@v4
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
-          report-json: "tmp-test/coverage/eslint-result.json"
+          report-json: "coverage/eslint-result.json"
 
       - name: Upload Test Results
         uses: actions/upload-artifact@v4
         if: success() || failure()
         with:
           name: test-results
-          path: tmp-test/coverage/test.results.xml
+          path: coverage/test.results.xml
