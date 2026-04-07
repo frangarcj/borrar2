@@ -34,7 +34,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           test-command: "npm run coverage-jenkins"
-          working-directory: ./
+          coverage-comment: false
 
       - name: Save Code Linting Report JSON
         run: npm run lint:json
